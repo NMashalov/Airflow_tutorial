@@ -7,7 +7,7 @@ from airflow.models.dag import DAG
 # Operators; we need this to operate!
 from airflow.operators.bash import BashOperator
 with DAG(
-    "my_bash_tutorial",
+    "my_bash_echo_tutorial",
     default_args={
         "retries":21,
         "retry_delay": timedelta(minutes=5),
@@ -19,24 +19,14 @@ with DAG(
     tags=["example"],
 ) as dag:
 
-    # t1, t2 and t3 are examples of tasks created by instantiating operators
     t1 = BashOperator(
-        task_id="print_date",
-        bash_command="date",
+        task_id="create_hello.txt",
+        bash_command="touch hello.txt",
     )
 
     t2 = BashOperator(
-        task_id="sleep",
-        depends_on_past=False,
-        bash_command="sleep 5",
-        retries=3,
+        task_id="fill_hello.txt",
+        bash_command="echo 'hello Airflow' << hello.txt",
     )
 
-
-    t3 = BashOperator(
-        task_id="templated",
-        depends_on_past=False,
-        bash_command=templated_command,
-    )
-
-    t1 >> [t2, t3]
+    t1 >> t2
