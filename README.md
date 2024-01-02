@@ -151,10 +151,38 @@ After successful installation we can start writing our pipelines. We'll add them
 
 So now it's your turn to experiment using Airflow documentation. I ask you to
 
-3. Actual task
+### Actual task
 
+Let's start with series of bash command you'll need to implement your task
 
+1. Download PDF by `wget` to `airflow_data`:
+    ```bash
+    !wget https://mathus.ru/math/geometric-progression.pdf -P airflow_data/
+    ```
 
+2. Transform PDF to series of PNG by [`Ghostscript`](https://www.ghostscript.com/) named `Pic%d.png` in folder `pics`
+    ```bash
+    gs -dNOPAUSE -dBATCH -sDEVICE=png16m -r300 -sOutputFile="airflow_data/pics/Pic%d.png" geometric-progression.pdf.pdf
+    ```
+3. Ocr them with [`Tesseract`](https://tesseract-ocr.github.io/) to file `exm%d` in folder `airflow_data/ocr/`
+    ```bash
+    tesseract airflow_data/pics/Pic%d.png airflow_data/ocr/exm{i} -l rus+equ
+    ```
+4. Concatenate all files to one `result.txt` in folder `airflow_data`
+
+    ```bash
+    cat airflow_data/ocr/* > result.txt
+    ```
+
+To run all this you'll probably need to install Ghostscript and Tesseract
+
+```bash
+apt-get update \
+  && apt-get -y install wget ghostscript tesseract-ocr tesseract-ocr-rus 
 ```
-!wget https://mathus.ru/math/geometric-progression.pdf
+
+Before you start you'll need to add to airflow image `Dockerfile` this scirpt
+```Docker
+RUN apt-get update \
+  && apt-get -y install wget ghostscript tesseract-ocr tesseract-ocr-rus 
 ```

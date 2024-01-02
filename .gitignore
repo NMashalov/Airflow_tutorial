@@ -3,3 +3,4 @@ config/
 plugins/
 .venv
 __pycache__
+airflow_data/
