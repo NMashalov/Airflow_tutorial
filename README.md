@@ -88,6 +88,10 @@ Informal description of created folders
 
 Hopefully we will be interested only in `dags` folder in this tutorial.
 
+<details>
+    <summary>Warning</summary>
+    Don't forget to run docker compose down, when you stop. Unless on next WSL run it will restart airflow again.
+</details>
 
 ### Toy dag development
 
