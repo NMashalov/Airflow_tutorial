@@ -88,9 +88,11 @@ Informal description of created folders
 
 Hopefully we will be interested only in `dags` folder in this tutorial.
 
+Actually `docker-compose.yaml` has some nasty secret with it. Running nodes includes `restart: always`, which forces docker to restart airflow with every reboot of system. In my repo i comment this field to mitigate that locally irritating behaviour. Yet in your production environment this well be beneficial to uncomment it.
+
 <details>
     <summary>Warning</summary>
-    Don't forget to run docker compose down, when you stop. Unless on next WSL run it will restart airflow again.
+    Don't forget to run docker compose down, when you stop. 
 </details>
 
 ### Toy dag development
